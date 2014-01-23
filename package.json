@@ -14,6 +14,7 @@
     "http-proxy": "*",
     "nopt": "*",
     "underscore": "*",
-    "seed-random": "*"
+    "seed-random": "*",
+    "coffee-script": "*"
   }
 }
