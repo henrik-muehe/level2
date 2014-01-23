@@ -23,18 +23,31 @@ function rejectRequest(reqData) {
   reqData.response.end();
 }
 
+
+var stats = {}
+
+
+
 var Queue = function (proxies, parameters) {
   this.proxies = proxies;
   this.parameters = parameters;
 };
 Queue.prototype.takeRequest = function (reqData) {
+  if (!stats[ipFromRequest(reqData)] ) {
+    stats[ipFromRequest(reqData)] = 0;
+  }
+  stats[ipFromRequest(reqData)] += 1;
+
+  if (Math.floor(Math.random()*50) == 1) {
+  }
+
   // Reject traffic as necessary:
-  // if (currently_blacklisted(ipFromRequest(reqData))) {
-  //   rejectRequest(reqData);
-  //   return;
-  // }
-  // Otherwise proxy it through:
-  this.proxies[0].proxyRequest(reqData.request, reqData.response, reqData.buffer);
+  if (currently_blacklisted(ipFromRequest(reqData))) {
+    rejectRequest(reqData);
+    return;
+  }
+
+  this.proxies[Math.floor(Math.random()*this.proxies.length)].proxyRequest(reqData.request, reqData.response, reqData.buffer);
 };
 Queue.prototype.requestFinished = function () {
   return;
